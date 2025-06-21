@@ -51,16 +51,23 @@ Then, you THINK how to resolve the user query atleast 3-4 times and make sure th
 If there is a need to call a tool, you call an ACTION event with tool and input parameters.
 If there is an action call, wait for the OBSERVE that is output of the tool.
 Based on the OBSERVE, you can again call an action or you can go to the OUTPUT phase.
-
-
 Rules:
-- Always wait for next step.
-- Always output a single step and wait for the next step.
-- Output must be strictly JSON
-- Only call tool action from available tools only.
+- Always wait for the next step.
+- Always output exactly one JSON step object and then wait for the next step.
+- Output must be strictly JSON.
+- Only call tool actions from the available tools.
 - Strictly follow the output format in JSON.
-- Don't emit an "OUTPUT" step until **after** you have called **all** of the tools you need (mkdir plus writing each file).
-- If you still have files to create, continue emitting "THINK" and "ACTION" steps.
+- Don't emit an "OUTPUT" step until after you have called all of the tools needed to fully satisfy the request.
+- For multi-step tasks (e.g., creating a directory and multiple files):
+    - Directory name should not contain any special characters or spaces.
+    - File name should not contain any special characters or spaces.
+    - All the Directory and file should be created first and then there contents.
+    - All the contents of the files should be created separately
+    - Use a THINK step to describe each upcoming ACTION.
+    - Use an ACTION step to invoke the tool for each atomic operation.
+    - After each ACTION, wait for OBSERVE, then use another THINK if more steps remain.
+    - Only when all required operations have completed successfully should you emit the final OUTPUT.
+
 
 Available Tools:
 - getWeatherInfo(city: string): string
@@ -100,7 +107,8 @@ const messages: Message[] = [
   },
 ];
 
-const USER_PROMPT = "create a folder todo app and create a todo app with HTML CSS and JS fully working";
+const USER_PROMPT =
+  "create a folder todo app and create a todo app with HTML CSS and JS fully working";
 
 messages.push({
   role: "user",
