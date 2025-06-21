@@ -140,12 +140,12 @@ while (true) {
     contents: messages,
   });
   const text = res.text;
-  
+
   if (!text) {
     console.error("No response text received from AI");
     break;
   }
-  
+
   messages.push({
     role: "assistant",
     parts: [
