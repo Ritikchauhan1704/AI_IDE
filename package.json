@@ -1,17 +1,19 @@
 {
-  "name": "ai_ide",
-  "module": "index.ts",
-  "type": "module",
+  "name": "ai-ide",
+  "version": "1.0.0",
+  "description": "A TypeScript-based AI IDE using Google's Gemini API",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "bun --watch index.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+    "dev": "bun --watch index.ts",
+    "build": "bun build index.ts --outdir dist",
+    "start": "bun dist/index.js"
   },
   "dependencies": {
-    "@google/genai": "^1.6.0"
+    "@google/genai": "^0.1.0",
+    "child_process": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
   }
 }
